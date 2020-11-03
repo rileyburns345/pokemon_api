@@ -1,48 +1,46 @@
 import logo from './logo.svg';
 import './App.css';
 import React, {useState} from 'react'
+import axios from 'axios';
 
 function App() {
 
-  const [pokemonList, setPokemonList] = useState([])
+  const [pokemonList, setPokemonList] = useState([]);
+  
 
-  const getPokemon = (e) => {
+  const GetPokemon = (e) => {
     e.preventDefault()
-    console.log('hello3')
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=807")
-          .then(response => {
-            return response.json();
-        }).then(response => {
-            console.log(response);
-            setPokemonList(response.results)
-        }).catch(err=>{
-            console.log(err);
-        });
-
+    axios.get("https://pokeapi.co/api/v2/pokemon?limit=807")
+        .then(response=>{
+          console.log('res: ', response.data.results)
+          setPokemonList(response.data.results)
+        })
+        .catch(err => {
+          console.log(err)
+        })
   }
-  
-  console.log('pokemon:', pokemonList)
-  
 
-
+  console.log('pokemonList:',pokemonList)
+  
+  // const writePokeName = () => {
+  //   document.getElementById("pokeContainer")
+  //   for (let i = 0; i < pokemonList.length; i++){
+  //     console.log(pokemonList[i])
+  //   }
+  // }
   
 
   return (
     <div className="App">
-      <form onSubmit={getPokemon}>
-      <button type="submit">Fetch Pokemon</button>
-      </form>
+      <button type="submit" onClick={GetPokemon}>Fetch Pokemon</button>
       {
-        pokemonList.map((pokemon) => 
-          <div>{pokemon.name}</div>
+        pokemonList.map((pokemon, i) => 
+      <div id={i}>{pokemon.name}</div>
         )
-      }
-
-      {
-        console.log('ymmm')
       }
     </div>
   );
+
 }
 
 export default App;
